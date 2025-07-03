@@ -4,6 +4,7 @@ import com.perfulandia.inventario.dto.InventarioDTO;
 import com.perfulandia.inventario.model.Inventario;
 import com.perfulandia.inventario.repository.InventarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class InventarioService {
     @Autowired
     private InventarioRepository inventarioRepository;
 
+    // Convertir entidad a DTO
     private InventarioDTO toDTO(Inventario inventario) {
         return new InventarioDTO(
                 inventario.getId(),
@@ -25,6 +27,7 @@ public class InventarioService {
         );
     }
 
+    // Convertir DTO a entidad
     private Inventario toEntity(InventarioDTO dto) {
         return new Inventario(
                 dto.getIdInventario(),
@@ -34,22 +37,26 @@ public class InventarioService {
         );
     }
 
+    // Crear un nuevo inventario
     public InventarioDTO crear(InventarioDTO dto) {
         Inventario inventario = toEntity(dto);
         return toDTO(inventarioRepository.save(inventario));
     }
 
+    // Listar todos los inventarios
     public List<InventarioDTO> listar() {
-    return inventarioRepository.findAll().stream()
-            .map(this::toDTO)
-            .collect(Collectors.toList());
-}
-
-    public InventarioDTO obtenerPorId(Integer id) {
-        Optional<Inventario> inventario = inventarioRepository.findById(id);
-        return inventario.map(this::toDTO).orElse(null); // puedes lanzar excepción si prefieres
+        return inventarioRepository.findAll().stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
+    // Obtener inventario por ID
+    public InventarioDTO obtenerPorId(Integer id) {
+        Optional<Inventario> inventario = inventarioRepository.findById(id);
+        return inventario.map(this::toDTO).orElse(null); // Si no lo encuentra, devuelve null
+    }
+
+    // Actualizar inventario
     public InventarioDTO actualizar(Integer id, InventarioDTO dto) {
         Optional<Inventario> existenteOpt = inventarioRepository.findById(id);
         if (existenteOpt.isEmpty()) {
@@ -64,6 +71,7 @@ public class InventarioService {
         return toDTO(inventarioRepository.save(existente));
     }
 
+    // Eliminar inventario
     public boolean eliminar(Integer id) {
         Optional<Inventario> inventario = inventarioRepository.findById(id);
         if (inventario.isEmpty()) {
