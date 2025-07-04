@@ -4,7 +4,6 @@ import com.perfulandia.inventario.dto.InventarioDTO;
 import com.perfulandia.inventario.model.Inventario;
 import com.perfulandia.inventario.repository.InventarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
